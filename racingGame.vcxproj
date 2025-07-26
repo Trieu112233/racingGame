@@ -82,7 +82,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Thực tập doanh nghiệp\SFML-2.6.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,8 +133,22 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="car1.png" />
+    <Image Include="car2.png" />
+    <Image Include="car3.png" />
+    <Image Include="car4.png" />
     <Image Include="mainCar.png" />
     <Image Include="road_map.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="BitcountPropDouble.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="car_accelerate_sound.wav" />
+    <Media Include="car_brake_sound.wav" />
+    <Media Include="car_collision_sound.wav" />
+    <Media Include="car_engine_sound.wav" />
+    <Media Include="game_background_music.wav" />
+    <Media Include="menu_theme_music.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

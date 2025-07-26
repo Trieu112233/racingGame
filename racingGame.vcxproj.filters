@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\image">
+      <UniqueIdentifier>{c2e03b68-7723-463e-9217-b88b72014634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\font">
+      <UniqueIdentifier>{e9cc3084-c9d7-4508-a676-cc46ddfc3bf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\sound">
+      <UniqueIdentifier>{2ca51eba-3e54-405b-8998-023b662b3ec1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,13 +30,47 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="car1.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\image</Filter>
     </Image>
     <Image Include="mainCar.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\image</Filter>
     </Image>
     <Image Include="road_map.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\image</Filter>
     </Image>
+    <Image Include="car2.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="car3.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="car4.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="BitcountPropDouble.ttf">
+      <Filter>Resource Files\font</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="car_accelerate_sound.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="car_brake_sound.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="car_collision_sound.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="game_background_music.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="menu_theme_music.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
+    <Media Include="car_engine_sound.wav">
+      <Filter>Resource Files\sound</Filter>
+    </Media>
   </ItemGroup>
 </Project>
