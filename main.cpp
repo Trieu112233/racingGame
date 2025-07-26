@@ -1,6 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <SFML/Audio.hpp>
+#include <iostream>
+#include <fstream>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
 
 class Car {
     sf::Sprite sprite;
@@ -100,19 +105,31 @@ public:
     }
 };
 
+struct HighScoreEntry {
+    int score;
+    std::string time;
+};
+
+bool compareHighScores(const HighScoreEntry& a, const HighScoreEntry& b) {
+    return a.score > b.score; // So sánh điểm số
+}
 class Game {
     enum GameState {
         MAIN_MENU,
         PLAYING,
-        GAME_OVER
+        GAME_OVER,
+		TOP_SCORES
 	};
 
     GameState currentState;
     sf::RenderWindow window;
     Car car;
     std::vector<Obstacle> obstacles;
+	std::vector <HighScoreEntry> highScores;
+
     sf::Clock clock;
     float spawnTimer = 0;
+    int score;
 
 	sf::Texture obstacleTexture[4];
     sf::Texture backgroundTexture;
@@ -120,10 +137,15 @@ class Game {
     sf::Sprite backgroundSprite2;
 
     sf::Font font;
+    sf::Text titleText;
 	sf::Text scoreText;
 	sf::Text gameOverText;
-	sf::Text mainMenuText;
-    int score;
+	sf::Text topScoresText;
+
+    int selectMenuIndex;
+	int selectGameOverIndex;
+	std::vector<std::string> menuOptions = { "Start Game", "Top Scores", "Exit" };
+	std::vector<std::string> gameOverOptions = { "Play Again", "Main Menu", "Exit" };
 
     sf::Music mainMenuMusic;
 	sf::Music gameMusic;
@@ -136,6 +158,7 @@ public:
     // Game Window: 600, 800
     Game() : window(sf::VideoMode(800, 800), "Racing Game"), car("mainCar.png"), score(0) {
         currentState = MAIN_MENU;
+		selectMenuIndex = 0;
         
         if (!backgroundTexture.loadFromFile("road_map.png")) {
             throw std::runtime_error("Could not load background image");
@@ -150,29 +173,33 @@ public:
 		}
 
         if (!font.loadFromFile("BitcountPropDouble.ttf")) {};
+
+        titleText.setFont(font);
+        titleText.setString("RACING GAME");
+        titleText.setCharacterSize(64);
+        titleText.setFillColor(sf::Color::Cyan);
+        titleText.setStyle(sf::Text::Bold);
+        titleText.setOrigin(titleText.getLocalBounds().width / 2, titleText.getLocalBounds().height / 2);
+        titleText.setPosition(window.getSize().x / 2.f, 120);
+
 		scoreText.setFont(font);
 		scoreText.setCharacterSize(24);
 		scoreText.setFillColor(sf::Color::White);
         scoreText.setPosition(620, 10);
 
+		topScoresText.setFont(font);
+		topScoresText.setCharacterSize(24);
+		topScoresText.setFillColor(sf::Color::Yellow);
+
 		gameOverText.setFont(font);
 		gameOverText.setCharacterSize(48);
 		gameOverText.setFillColor(sf::Color::Red);
 
-        mainMenuText.setFont(font);
-		mainMenuText.setCharacterSize(48);
-		mainMenuText.setFillColor(sf::Color::Blue);
-		mainMenuText.setString("Press Enter to Start");
-		mainMenuText.setOrigin(mainMenuText.getLocalBounds().width / 2, mainMenuText.getLocalBounds().height / 2);
-		mainMenuText.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-
 		if (!mainMenuMusic.openFromFile("menu_theme_music.wav")) {};
 		mainMenuMusic.setLoop(true);
-
         if (!gameMusic.openFromFile("game_background_music.wav")) {};
 		gameMusic.setLoop(true);
         gameMusic.setVolume(50);
-
         if (!carEngineMusic.openFromFile("car_engine_sound.wav")) {};
 		carEngineMusic.setLoop(true);
 
@@ -197,16 +224,30 @@ public:
                 processGameEvents();
                 updateGame();
                 renderGame();
-				break;
+                break;
             case GAME_OVER:
                 processGameOverEvents();
                 renderGameOver();
-	    		break;
+                break;
+            case TOP_SCORES:
+                processTopScoresEvents();
+                renderTopScores();
+                break;
             }
         }
     }
 
 private:
+    std::string getCurrentDateTime() {
+        auto now = std::chrono::system_clock::now();
+        auto time_t = std::chrono::system_clock::to_time_t(now);
+        std::tm tm;
+        localtime_s(&tm, &time_t); 
+        std::stringstream ss;
+        ss << std::put_time(&tm, "%d/%m/%Y %H:%M:%S");
+        return ss.str();
+    }
+
     void resetGame() {
         score = 0;
         car.reset();
@@ -215,24 +256,105 @@ private:
         spawnTimer = 0;
     }
 
+    void loadHighScores() {
+        highScores.clear();
+        std::ifstream fin("high_score.txt");
+        std::string line;
+        while (std::getline(fin, line)) {
+            if (line.empty()) continue;
+            size_t pos = line.find(',');
+            if (pos != std::string::npos) {
+                int score = std::stoi(line.substr(0, pos));
+                std::string datetime = line.substr(pos + 1);
+                highScores.push_back({ score, datetime });
+            }
+        }
+        fin.close();
+        std::sort(highScores.begin(), highScores.end(), compareHighScores);
+        if (highScores.size() > 10) highScores.resize(10);
+    }
+
+    void saveHighScores() {
+        std::ofstream fout("high_score.txt");
+        for (const auto& entry : highScores) {
+            fout << entry.score << "," << entry.time << std::endl;
+        }
+        fout.close();
+    }
+
+    void tryAddHighScore(int newScore) {
+        loadHighScores();
+        highScores.push_back({ newScore, getCurrentDateTime() });
+        std::sort(highScores.begin(), highScores.end(), [](const HighScoreEntry& a, const HighScoreEntry& b) {
+            return a.score > b.score;
+            });
+        if (highScores.size() > 10) highScores.resize(10);
+        saveHighScores();
+    }
+
+    void updateTopScoresText() {
+        loadHighScores();
+        std::string topScoresString = "Top Scores:\n\n";
+        for (size_t i = 0; i < highScores.size(); ++i) {
+            topScoresString += std::to_string(i + 1) + ". " +
+                std::to_string(highScores[i].score) + " - " +
+                highScores[i].time + "\n";
+        }
+        topScoresString += "\nPress Esc to return to menu";
+        topScoresText.setString(topScoresString);
+        topScoresText.setOrigin(topScoresText.getLocalBounds().width / 2, 0);
+        topScoresText.setPosition(window.getSize().x / 2.f, 100);
+    }
+
     // State: MAIN_MENU
     void processMenuEvent() {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) window.close();
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
-                currentState = PLAYING;
-                resetGame();
-                mainMenuMusic.stop();
-                gameMusic.play();
-                carEngineMusic.play();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Up) {
+                    selectMenuIndex = (selectMenuIndex - 1 + menuOptions.size()) % menuOptions.size();
+				}
+                if (event.key.code == sf::Keyboard::Down) {
+                    selectMenuIndex = (selectMenuIndex + 1) % menuOptions.size();
+                }
+                if (event.key.code == sf::Keyboard::Enter) {
+                    if (selectMenuIndex == 0) {
+                        currentState = PLAYING;
+                        resetGame();
+                        mainMenuMusic.stop();
+                        gameMusic.play();
+                        carEngineMusic.play();
+                    } else if (selectMenuIndex == 1) currentState = TOP_SCORES;
+                    else if (selectMenuIndex == 2) window.close();
+                }
             }
         }
     }
 
     void renderMenu() {
         window.clear(sf::Color::Black);
-        window.draw(mainMenuText);
+
+        window.draw(titleText);
+
+        // Vẽ các lựa chọn menu
+        for (size_t i = 0; i < menuOptions.size(); ++i) {
+            sf::Text option;
+            option.setFont(font);
+            option.setString(menuOptions[i]);
+            option.setCharacterSize(40);
+            option.setStyle(sf::Text::Bold);
+            option.setOrigin(option.getLocalBounds().width / 2, option.getLocalBounds().height / 2);
+            option.setPosition(window.getSize().x / 2.f, 300 + i * 80);
+
+            if ((int)i == selectMenuIndex)
+                option.setFillColor(sf::Color::Red);
+            else
+                option.setFillColor(sf::Color::White);
+
+            window.draw(option);
+        }
+
         window.display();
     }
 
@@ -300,13 +422,15 @@ private:
         // Xử lý va chạm
         for (auto& obs : obstacles) {
             if (car.getBounds().intersects(obs.getBounds())) {
+				tryAddHighScore(score);
                 currentState = GAME_OVER;
+				selectGameOverIndex = 0;
                 gameMusic.stop();
                 carEngineMusic.stop();
                 car_collision_sound.play();
 				sf::sleep(sf::seconds(2.5f)); 
 
-                gameOverText.setString("Game Over\nTotal Score: " + std::to_string(score) + "\nPress Enter to play again\nPress Backspace to Exit");
+                gameOverText.setString("Game Over\nTotal Score: " + std::to_string(score));
                 mainMenuMusic.play();
             }
         }
@@ -338,15 +462,25 @@ private:
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) window.close();
             if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Enter) {
-                    currentState = PLAYING;
-                    resetGame();
-                    mainMenuMusic.stop();
-                    gameMusic.play();
-                    carEngineMusic.play();
+                if (event.key.code == sf::Keyboard::Up) {
+                    selectGameOverIndex = (selectGameOverIndex - 1 + gameOverOptions.size()) % gameOverOptions.size();
                 }
-                if (event.key.code == sf::Keyboard::BackSpace) {
-                    window.close();
+                if (event.key.code == sf::Keyboard::Down) {
+                    selectGameOverIndex = (selectGameOverIndex + 1) % gameOverOptions.size();
+                }
+                if (event.key.code == sf::Keyboard::Enter) {
+                    if (selectGameOverIndex == 0) {
+                        currentState = PLAYING;
+                        resetGame();
+                        mainMenuMusic.stop();
+                        gameMusic.play();
+                        carEngineMusic.play();
+                    }
+                    else if (selectGameOverIndex == 1) {
+                        selectMenuIndex = 0;
+                        currentState = MAIN_MENU;
+                    } 
+                    else if (selectGameOverIndex == 2) window.close();
                 }
             }
         }
@@ -355,8 +489,45 @@ private:
     void renderGameOver() {
         window.clear(sf::Color::Black);
         window.draw(gameOverText);
+        for (size_t i = 0; i < gameOverOptions.size(); ++i) {
+            sf::Text option;
+            option.setFont(font);
+            option.setString(gameOverOptions[i]);
+            option.setCharacterSize(40);
+            option.setStyle(sf::Text::Bold);
+            option.setOrigin(option.getLocalBounds().width / 2, option.getLocalBounds().height / 2);
+            option.setPosition(window.getSize().x / 2.f, 300 + i * 80);
+
+            if ((int)i == selectGameOverIndex)
+                option.setFillColor(sf::Color::Red);
+            else
+                option.setFillColor(sf::Color::White);
+
+            window.draw(option);
+        }
         window.display();
     }
+
+	// State: TOP_SCORES
+    void processTopScoresEvents() {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Escape) {
+                    currentState = MAIN_MENU;
+                    mainMenuMusic.play();
+                }
+            }
+        }
+    }
+
+    void renderTopScores() {
+        window.clear(sf::Color::Black);
+        updateTopScoresText();
+        window.draw(topScoresText);
+        window.display();
+	}
 };
 
 int main() {

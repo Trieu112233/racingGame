@@ -150,6 +150,9 @@
     <Media Include="game_background_music.wav" />
     <Media Include="menu_theme_music.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="high_score.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

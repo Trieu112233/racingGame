@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\sound">
       <UniqueIdentifier>{2ca51eba-3e54-405b-8998-023b662b3ec1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\txt">
+      <UniqueIdentifier>{314b7650-71ed-4aed-8a5a-b71e479f2026}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -72,5 +75,10 @@
     <Media Include="car_engine_sound.wav">
       <Filter>Resource Files\sound</Filter>
     </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="high_score.txt">
+      <Filter>Resource Files\txt</Filter>
+    </Text>
   </ItemGroup>
 </Project>
