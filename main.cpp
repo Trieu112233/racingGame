@@ -516,7 +516,6 @@ private:
             if (event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Escape) {
                     currentState = MAIN_MENU;
-                    mainMenuMusic.play();
                 }
             }
         }
