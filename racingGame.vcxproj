@@ -129,9 +129,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Car.cpp" />
+    <ClCompile Include="CompareScore.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="old_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="barrier.png" />
     <Image Include="car1.png" />
     <Image Include="car2.png" />
     <Image Include="car3.png" />
@@ -151,7 +157,13 @@
     <Media Include="menu_theme_music.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="high_score.txt" />
+    <ClInclude Include="Car.h" />
+    <ClInclude Include="CompareScore.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Obstacle.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="high_scores.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
