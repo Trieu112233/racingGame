@@ -251,11 +251,11 @@ void Game::spawnObstacle() {
     float randomLanePos = rand() % 6;
     int randomType = (int)rand() % 4; // Chọn ngẫu nhiên loại xe cản
 
-    if (randomLanePos < 3.f) obstacles.emplace_back(obstacleTexture[randomType], lanePos[randomLanePos], -150.f, true);
-    else obstacles.emplace_back(obstacleTexture[randomType], lanePos[randomLanePos], -150.f, false);
+    if (randomLanePos < 3.f) obstacles.push_back(std::make_unique<CarObstacle>(obstacleTexture[randomType], lanePos[randomLanePos], -150.f, true));
+    else obstacles.push_back(std::make_unique<CarObstacle>(obstacleTexture[randomType], lanePos[randomLanePos], -150.f, false));
 
     if (middleObstacleTimer--) {
-        obstacles.emplace_back(obstacleTexture[4], 365.f, -150.f, true);
+        obstacles.push_back(std::make_unique<BarrierObstacle>(obstacleTexture[4], 365.f, -150.f));
     }
     else middleObstacleTimer = 3;
 
@@ -285,12 +285,11 @@ void Game::updateGame() {
         spawnTimer = 0;
     }
 
-    for (auto& obs : obstacles)
-        obs.update(car.getSpeed(), dt);
+    for (auto& obs : obstacles) obs->update(car.getSpeed(), dt);
 
     // Xử lý va chạm
     for (auto& obs : obstacles) {
-        if (car.getBounds().intersects(obs.getBounds())) {
+        if (car.getBounds().intersects(obs->getBounds())) {
             tryAddHighScore(score);
             currentState = GAME_OVER;
             selectGameOverIndex = 0;
@@ -307,7 +306,7 @@ void Game::updateGame() {
     // Xoá vật cản đã ra khỏi màn hình
     obstacles.erase(
         std::remove_if(obstacles.begin(), obstacles.end(),
-            [](Obstacle& o) { return o.isOutOfScreen(); }),
+            [](const std::unique_ptr<Obstacle>& o) { return o->isOutOfScreen(); }),
         obstacles.end());
 
     // Cập nhật điểm số
@@ -320,8 +319,7 @@ void Game::renderGame() {
     window.draw(backgroundSprite2);
     window.draw(scoreText);
     car.draw(window);
-    for (auto& obs : obstacles)
-        obs.draw(window);
+    for (auto& obs : obstacles) obs->draw(window);
     window.display();
 }
 

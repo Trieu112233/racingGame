@@ -15,7 +15,7 @@ class Game {
     GameState currentState;
     sf::RenderWindow window;
     Car car;
-    std::vector<Obstacle> obstacles;
+    std::vector<std::unique_ptr<Obstacle>> obstacles;    
     std::vector<float> lanePos;
     std::vector <HighScoreEntry> highScores;
 
