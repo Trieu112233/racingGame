@@ -98,6 +98,9 @@
     <Image Include="barrier.png">
       <Filter>Resource Files\image</Filter>
     </Image>
+    <Image Include="water_puddle.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="BitcountPropDouble.ttf">

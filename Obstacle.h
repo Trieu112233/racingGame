@@ -30,3 +30,18 @@ public:
     sf::FloatRect getBounds() const override;
     bool isOutOfScreen() const override;
 };
+
+class WaterPuddleObstacle : public Obstacle {
+    sf::Sprite sprite;
+    float slipForce;
+    bool hasSlipped;
+public:
+    WaterPuddleObstacle(const sf::Texture& texture, float x, float startY, float slip);
+    void update(float carSpeed, float dt) override;
+    void draw(sf::RenderWindow& window) override;
+    sf::FloatRect getBounds() const override;
+    bool isOutOfScreen() const override;
+    float getSlipForce() const { return slipForce; }
+    bool hasTriggeredSlip() const { return hasSlipped; }
+    void triggerSlip() { hasSlipped = true; }
+};

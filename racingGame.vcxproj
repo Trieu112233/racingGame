@@ -148,6 +148,7 @@
     <Image Include="car4.png" />
     <Image Include="mainCar.png" />
     <Image Include="road_map.png" />
+    <Image Include="water_puddle.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="BitcountPropDouble.ttf" />
