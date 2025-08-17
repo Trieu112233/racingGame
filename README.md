@@ -51,7 +51,7 @@ A 2D racing game built with C++ and SFML featuring obstacle avoidance, dynamic p
 
 ## 💻 Technical Architecture & Code Structure
 ### File structure
-
+```
 racingGame/
 ├── main.cpp                    # Entry point
 ├── Game.h/.cpp                 # Main controller
@@ -65,8 +65,8 @@ racingGame/
 │   ├── Car.h/.cpp              
 │   └── Obstacle.h/.cpp         
 └── Utils/                      # Utilities
-    └── HighScoreManager.h/.cpp # Quản lý điểm
-
+    └── HighScoreManager.h/.cpp 
+```
 ### Class diagram
 ### State diagram
 ### Activity diagram
