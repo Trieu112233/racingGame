@@ -146,11 +146,14 @@
     <Image Include="car2.png" />
     <Image Include="car3.png" />
     <Image Include="car4.png" />
+    <Image Include="game_over_background.png" />
     <Image Include="mainCar.png" />
+    <Image Include="menu_background.png" />
     <Image Include="road_map.png" />
     <Image Include="water_puddle.png" />
   </ItemGroup>
   <ItemGroup>
+    <Font Include="Archivo.ttf" />
     <Font Include="BitcountPropDouble.ttf" />
   </ItemGroup>
   <ItemGroup>

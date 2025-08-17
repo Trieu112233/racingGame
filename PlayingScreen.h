@@ -20,7 +20,6 @@ class PlayingScreen : public Screen {
     int next;
 
     sf::Texture obstacleTexture[6];
-    sf::Texture carCollisionTexture;
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite1, backgroundSprite2;
     sf::Font font;

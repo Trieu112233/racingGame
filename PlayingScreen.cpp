@@ -25,8 +25,6 @@ PlayingScreen::PlayingScreen(HighScoreManager& hsm)
     if (!obstacleTexture[4].loadFromFile("barrier.png")) {}
     if (!obstacleTexture[5].loadFromFile("water_puddle.png")) {}
 
-    if (!carCollisionTexture.loadFromFile("mainCar_collision.png")) {}
-
     if (!font.loadFromFile("BitcountPropDouble.ttf")) {}
 
     scoreText.setFont(font);
@@ -122,7 +120,6 @@ void PlayingScreen::update(float dt) {
                 highScoreManager.tryAdd(score, highScoreManager.getCurrentDateTime());
                 gameMusic.stop();
                 carEngineMusic.stop();
-                car.setTexture(carCollisionTexture);
                 car_collision_sound.play();
 
                 sf::sleep(sf::seconds(2.5f));

@@ -101,9 +101,18 @@
     <Image Include="water_puddle.png">
       <Filter>Resource Files\image</Filter>
     </Image>
+    <Image Include="menu_background.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="game_over_background.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="BitcountPropDouble.ttf">
+      <Filter>Resource Files\font</Filter>
+    </Font>
+    <Font Include="Archivo.ttf">
       <Filter>Resource Files\font</Filter>
     </Font>
   </ItemGroup>

@@ -9,6 +9,10 @@ MenuScreen::MenuScreen() : selected(0), finished(false), next(0) {
     titleText.setStyle(sf::Text::Bold);
     titleText.setOrigin(titleText.getLocalBounds().width / 2, titleText.getLocalBounds().height / 2);
     titleText.setPosition(490, 120);
+
+    if (!menuBackgroundTexture.loadFromFile("menu_background.png")) {}
+	menuBackgroundSprite.setTexture(menuBackgroundTexture);
+
     options = { "Play", "Top Scores", "Exit" };
 }
 
@@ -31,6 +35,7 @@ void MenuScreen::processEvent(sf::RenderWindow& window) {
 
 void MenuScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
+	window.draw(menuBackgroundSprite);
     window.draw(titleText);
     for (size_t i = 0; i < options.size(); ++i) {
         sf::Text option;

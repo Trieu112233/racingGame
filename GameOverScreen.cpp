@@ -4,13 +4,17 @@ GameOverScreen::GameOverScreen(int finalScore)
     : score(finalScore), selected(0), finished(false), next(0) {
     options = { "Play Again", "Back to Main Menu", "Exit" };
     
-    font.loadFromFile("BitcountPropDouble.ttf");
-    gameOverText.setFont(font);
+    gameOverFont.loadFromFile("Archivo.ttf");
+	font.loadFromFile("BitcountPropDouble.ttf");
+    gameOverText.setFont(gameOverFont);
     gameOverText.setString("Game Over\nTotal Score: " + std::to_string(score));
     gameOverText.setCharacterSize(48);
     gameOverText.setFillColor(sf::Color::Red);
     gameOverText.setOrigin(gameOverText.getLocalBounds().width / 2, gameOverText.getLocalBounds().height / 2);
     gameOverText.setPosition(490, 120);
+
+    if(!gameOverBackgroundTexture.loadFromFile("game_over_background.png")) {}
+	gameOverBackgroundSprite.setTexture(gameOverBackgroundTexture);
 }
 
 void GameOverScreen::processEvent(sf::RenderWindow& window) {
@@ -32,6 +36,7 @@ void GameOverScreen::processEvent(sf::RenderWindow& window) {
 
 void GameOverScreen::render(sf::RenderWindow& window) {
     window.clear(sf::Color::Black);
+	window.draw(gameOverBackgroundSprite);
     window.draw(gameOverText);
     
     for (size_t i = 0; i < options.size(); ++i) {

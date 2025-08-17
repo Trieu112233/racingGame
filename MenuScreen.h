@@ -7,6 +7,8 @@
 class MenuScreen : public Screen {
     sf::Font font;
     sf::Text titleText;
+	sf::Texture menuBackgroundTexture;
+	sf::Sprite menuBackgroundSprite;
     std::vector<std::string> options;
     int selected;
     bool finished;

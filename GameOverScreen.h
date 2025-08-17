@@ -11,7 +11,10 @@ class GameOverScreen : public Screen {
     bool finished;
     int next;
     sf::Font font;
+	sf::Font gameOverFont;
     sf::Text gameOverText;
+	sf::Texture gameOverBackgroundTexture;
+	sf::Sprite gameOverBackgroundSprite;
     
 public:
     GameOverScreen(int finalScore);
