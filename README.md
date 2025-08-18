@@ -107,7 +107,7 @@ racingGame/
 - **Resolution**: 980x800 (fixed)
 - **Input**: Keyboard only
 
-- ### Development Environment
+### Development Environment
 - **IDE**: Visual Studio Express 2012 or higher
   - Visual Studio Community (free alternative)
   - Visual Studio Professional/Enterprise
