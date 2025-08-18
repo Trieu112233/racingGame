@@ -77,19 +77,19 @@ racingGame/
 ## 📸 Screenshots
 
 ### Main Menu
-![Main Menu](![alt text](main_menu_screenshot.jpg))
+![alt text](main_menu_screenshot.jpg)
 *Navigate between Play, Top Scores, and Exit options*
 
 ### Gameplay
-![Gameplay](![alt text](playing_screenshot.jpg))
+![alt text](playing_screenshot.jpg)
 *Avoid obstacles while scoring points on the highway*
 
 ### Game Over Screen
-![Game Over](![alt text](game_over_screenshot.jpg))
+![alt text](game_over_screenshot.jpg)
 *View final score and choose next action*
 
 ### Top Scores
-![High Scores](![alt text](top_scores_screenshot.jpg))
+![alt text](top_scores_screenshot.jpg)
 *View top 10 scores with timestamps*
 
 ## 📦 Dependencies & Requirements
